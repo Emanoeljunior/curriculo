@@ -1,0 +1,7 @@
+{
+  "name": "curriculum",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}

@@ -3,6 +3,12 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "vue"
+  "type": "vue",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "https://api.instagram.com/v1"
+    }
+  ]
  
 }

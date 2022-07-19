@@ -24,7 +24,7 @@
               médio pedi ajuda pro meu pai e tiramos esse projeto do papel.
             </div>
             <div class="container-img">
-              <ion-img class="image" src="./assets/bobina_tesla.jpg"></ion-img>
+              <ion-img class="image" src="https://storage.googleapis.com/curriculo-emanoel_curriculo_bucket/uploads/2022/07/18/camera_py.jpg"></ion-img>
             </div>
 
             <!-- Your virtual scroll content -->
@@ -63,7 +63,7 @@
 </template>
 
 <script lang="js">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent } from "vue";
 import { IonPage, IonHeader, IonContent } from "@ionic/vue";
 import axios from 'axios';
 
@@ -89,23 +89,19 @@ export default defineComponent({
   
  
   setup() {
-             axios({
-    url: "https://curriculo-emanoel.uc.r.appspot.com/graphql",
-    method: "post",
-    data: {
-      query: `
-            {
-              allPosts {
-              title
-              content
-              image
-              }
-            }
-            `
+           const data =  axios.post('/api', {
+  query: `{
+      allPosts{
+        id
+      }
+  }`,
+}, {
+    headers: {
+      'Content-Type': 'application/json'
     }
-  }).then(response => {
-    console.log(response);
-  });
+  }).then(response => {console.log(response.data.data)})
+  
+
         },
   
 });

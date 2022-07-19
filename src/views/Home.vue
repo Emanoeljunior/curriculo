@@ -24,7 +24,10 @@
               médio pedi ajuda pro meu pai e tiramos esse projeto do papel.
             </div>
             <div class="container-img">
-              <ion-img class="image" src="https://storage.googleapis.com/curriculo-emanoel_curriculo_bucket/uploads/2022/07/18/camera_py.jpg"></ion-img>
+              <ion-img
+                class="image"
+                src="https://storage.googleapis.com/curriculo-emanoel_curriculo_bucket/uploads/2022/07/18/camera_py.jpg"
+              ></ion-img>
             </div>
 
             <!-- Your virtual scroll content -->
@@ -38,6 +41,14 @@
             >
             <ion-card-title>Card Title</ion-card-title>
           </ion-card-header>
+
+          <blog-post
+            v-for="post in posts"
+            v-bind:key="post.id"
+            v-bind:title="post.title"
+          >
+            {{ post.title }} <br
+          /></blog-post>
 
           <div class="ion-text-justify">
             Esse projeto foi desenvolvido juntamente com o Vinicíus Amancio para
@@ -66,43 +77,79 @@
 import { defineComponent } from "vue";
 import { IonPage, IonHeader, IonContent } from "@ionic/vue";
 import axios from 'axios';
+import { ref, onMounted } from "vue";
 
 export default defineComponent({
   
   name: "Tab3Page",
   components: { IonHeader, IonContent, IonPage },
   data:() =>({
-  posts: [
-    {
-      title: "Primeiro Post",
-      content:
-        '<p><img alt="" src="/media/uploads/2022/07/16/bobina_tesla.jpg" style="height:200px; width:200px" /></p>',
-    },
-    {
-      title: "Post 1",
-      content:
-        '<p><img alt="" src="/media/uploads/2022/07/16/bobina_tesla_TU5Py9s.jpg" style="height:200px; width:200px" /></p>',
-    },
-  ],
+  // posts: [
+  //   {
+  //     id: 1,
+  //     title: "Primeiro Post",
+  //     content:
+  //       '<p><img alt="" src="/media/uploads/2022/07/16/bobina_tesla.jpg" style="height:200px; width:200px" /></p>',
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Post 1",
+  //     content:
+  //       '<p><img alt="" src="/media/uploads/2022/07/16/bobina_tesla_TU5Py9s.jpg" style="height:200px; width:200px" /></p>',
+  //   },
+  // ],
 
   }),
   
- 
-  setup() {
-           const data =  axios.post('/api', {
-  query: `{
-      allPosts{
-        id
-      }
-  }`,
+ setup() {
+    const posts = ref([]);
+    onMounted(async () => {
+      const res = await axios.post('/api', {
+      query: `{
+          allPosts{
+                  id
+                  title
+                  }
+              }`,
 }, {
     headers: {
       'Content-Type': 'application/json'
     }
-  }).then(response => {console.log(response.data.data)})
+  })
   
+      posts.value = res.data.data.allPosts;
+      // console.log(res);
+    });
 
-        },
+    return {
+      posts,
+    };
+  },
+
+//   setup() {
+//       const posts = axios.post('/api', {
+//       query: `{
+//           allPosts{
+//                   id
+//                   title
+//                   }
+//               }`,
+// }, {
+//     headers: {
+//       'Content-Type': 'application/json'
+//     }
+//   }).then(response => { 
+//   console.log(response.data.data.allPosts)
+//   return response.data.data.allPosts
+
+//   })
+
+
+//       return{
+//         posts
+//       }
+
+//         },
   
 });
 

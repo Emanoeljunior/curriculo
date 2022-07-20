@@ -2,93 +2,31 @@
   <ion-page>
     <ion-header> </ion-header>
     <ion-content scroll-y="true">
-      
       <div class="container">
-        <ion-text>
-          
-          <ion-card>
-            <div class="ion-text-center">
-            <h3>Carreira</h3>
-            <h3>Experiência com IoT</h3>
-          </div>
+            <blog-post
+            v-for="post in posts"
+            v-bind:key="post.id"
+            v-bind:title="post.title"
+          >
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>{{ post.date }}</ion-card-subtitle>
+            <ion-card-title> {{ post.title }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
             <div class="ion-text-justify">
-            Para a disciplina de desenvolvimento mobile e IoT na faculdade
-            desenvolvi um vídeo explicativo sobre API rest e sua importância
-            para aplicações IoT no contexto de cidades inteligentes. Para a
-            disciplina de desenvolvimento mobile e IoT na faculdade desenvolvi
-            um vídeo explicativo sobre API rest e sua importância para
-            aplicações IoT no contexto de cidades inteligentes.
-          </div>
-           <!-- Your virtual scroll content -->
-        <div class="video-container">
-          <iframe
-            class="responsive-iframe"
-            src="https://www.youtube.com/embed/oy-weBadEDs?rel=0"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
+              {{ post.content }}
+            </div>
+            <div class="container-img">
+               <span v-html="post.image"></span> 
+            </div>
+
+            <!-- Your virtual scroll content -->
+          </ion-card-content>
+        </ion-card>
+        </blog-post>
         </div>
-
-          </ion-card>
-          
-        </ion-text>
-
-       
-        <h3>Projetos pessoais</h3>
-
-        <ion-text>
-          <div class="ion-text-center">
-            <h3>Bobina de Tesla</h3>
-          </div>
-
-          <div class="ion-text-justify">
-            No ultimo ano do ensino fundamental tivemos um trabalho sobre tipos
-            de energias, o meu grupo ficou responsável por apresentar sobre a
-            energia atômica e radiação. Onde fizemos uma pesquisa bibliográfica
-            sobre o tema. No entanto a parte de aplicações práticas sempre me
-            chamaram a atenção, como com radiação não poderíamos realizar nenhum
-            experimento prático devido a medidas de proteção, resolvi ajudar os
-            outros grupos com ideias do que implementar para a parte prática.
-            Surgindo então a ideia de construir uma bobina de tesla. Acabamos
-            não implementando naquele ano, mas essa vontade ficou comigo, e
-            assim que terminei o ensino médio pedi ajuda pro meu pai e tiramos
-            esse projeto do papel.
-          </div>
-          <div class="container-img">
-            <ion-img
-              class="image"
-              hig
-              src="./assets/bobina_tesla.jpg"
-            ></ion-img>
-          </div>
-
-          <!-- Your virtual scroll content -->
-        </ion-text>
-         <ion-text>
-          <div class="ion-text-center">
-            <h3>Projeto de Automação (Codesys e Factory IO)</h3>
-          </div>
-
-          <div class="ion-text-justify">
-            Esse projeto foi desenvolvido juntamente com o Vinicíus Amancio para a disciplina de 
-            Laboratório de Automação e Manufatura. Onde é utilizado a técnica de Sistema de Eventos Discretos (SED), 
-            modelando e implementando os surpevisores reduzidos na abordagem modular local.
-          </div>
-        <div class="video-container">
-          <iframe
-            class="responsive-iframe"
-            src="https://www.youtube.com/embed/IRJ6oGiS9QQ?rel=0"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-        </div>
-        </ion-text>
-
-      </div>
+        
     </ion-content>
   </ion-page>
 </template>
@@ -96,10 +34,39 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { IonPage, IonHeader, IonContent } from "@ionic/vue";
+import axios from 'axios';
+import { ref, onMounted } from "vue";
 
 export default defineComponent({
   name: "Tab3Page",
   components: { IonHeader, IonContent, IonPage },
+  setup() {
+    const posts = ref([]);
+    onMounted(async () => {
+      const res = await axios.post('/api', {
+      query: `{
+          allPosts{
+                  id
+                  title
+                  image
+                  content
+                  date
+                  }
+              }`,
+}, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  
+      posts.value = res.data.data.allPosts;
+      console.log(res);
+    });
+
+    return {
+      posts,
+    };
+  },
 });
 </script>
 
@@ -134,11 +101,17 @@ export default defineComponent({
 .container-img {
   width: 500px;
   height: 500px;
-  margin-top: 15px;
+  margin-top: 15px !important;
   margin-bottom: 35px;
   align-content: center;
   position: relative;
   margin: auto;
-  
+}
+.ion-card {
+  padding: 15px;
+}
+:root {
+  --ion-safe-area-top: 20px;
+  --ion-safe-area-bottom: 22px;
 }
 </style>

@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode development",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@capacitor/android": "3.6.0",
     "@capacitor/app": "1.1.1",
     "@capacitor/core": "3.6.0",
     "@capacitor/haptics": "1.1.4",
